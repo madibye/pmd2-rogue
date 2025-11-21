@@ -1,0 +1,3 @@
+[submodule "RawAsset"]
+	path = RawAsset
+	url = https://github.com/PMDCollab/RawAsset

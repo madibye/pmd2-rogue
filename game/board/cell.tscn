@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://16ljmce8dgqe"]
+
+[ext_resource type="Shader" uid="uid://dh4ib38xgcakg" path="res://game/board/cell.gdshader" id="1_es033"]
+[ext_resource type="Script" uid="uid://cba25fnybbulx" path="res://game/board/cell.gd" id="1_vhpgc"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_av2et"]
+shader = ExtResource("1_es033")
+shader_parameter/grid_border = 0.2
+shader_parameter/border_blur = 2.0
+shader_parameter/alpha = 1.0
+shader_parameter/min_color_mod = Vector3(0.6, 0.6, 0.6)
+shader_parameter/max_color_mod = Vector3(1, 1, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_lbmv2"]
+size = Vector2(96, 96)
+
+[node name="Cell" type="Node2D" unique_id=358291984]
+script = ExtResource("1_vhpgc")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=1189670056]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_av2et")
+position = Vector2(48, 48)
+mesh = SubResource("QuadMesh_lbmv2")

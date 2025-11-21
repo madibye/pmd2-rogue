@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnx2ckwymgare"]
+
+[ext_resource type="Script" uid="uid://ra3rtc8cp4ug" path="res://game/board/grid.gd" id="1_2j8f5"]
+
+[node name="CellGrid" type="Node2D" unique_id=922129377]
+script = ExtResource("1_2j8f5")
+metadata/_custom_type_script = "uid://ra3rtc8cp4ug"
