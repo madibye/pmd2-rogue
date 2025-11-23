@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UnitDefinition" load_steps=3 format=3 uid="uid://dlpl4lcv38k7i"]
+
+[ext_resource type="Script" uid="uid://do6jrd33ggefk" path="res://game/unit/unit_definition.gd" id="1_3utus"]
+[ext_resource type="Script" uid="uid://bqrffujsn775c" path="res://game/unit/evolution_condition.gd" id="2_s05a0"]
+
+[resource]
+script = ExtResource("1_3utus")
+name = "Empoleon"
+dex_number = 395
+forms = Dictionary[String, String]({
+"0395": "Normal",
+"0395-0000-0001": "Shiny"
+})
+shadow_size = 2.0
+metadata/_custom_type_script = "uid://do6jrd33ggefk"

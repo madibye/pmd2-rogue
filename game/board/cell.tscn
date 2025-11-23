@@ -8,7 +8,7 @@ shader = ExtResource("1_es033")
 shader_parameter/grid_border = 0.2
 shader_parameter/border_blur = 2.0
 shader_parameter/alpha = 1.0
-shader_parameter/min_color_mod = Vector3(0.6, 0.6, 0.6)
+shader_parameter/min_color_mod = Vector3(0.5, 1, 0.6)
 shader_parameter/max_color_mod = Vector3(1, 1, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_lbmv2"]

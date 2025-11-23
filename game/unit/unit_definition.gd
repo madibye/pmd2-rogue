@@ -7,23 +7,22 @@ const SPRITE_FRAME_FOLDER := "res://resources/spriteframes"
 
 @export var name: String
 @export_range(1, 4) var stars: int
-@export var dex_number: int
 @export var ability: AbilityDefinition
 @export var traits: Array[Trait.T]
 @export var base_stats: UnitBaseStats
 @export var evolutions: Dictionary[UnitDefinition, EvolutionCondition]
-@export var spritesheets: Dictionary[String, SpriteFrames]
+@export var dex_number: int
+@export var forms: Dictionary[String, String]
 @export var shadow_size: float
 
 #region Helper functions
 
-func get_spritesheet(form_str := "", type_str := "") -> SpriteFrames:
-	var query := str(dex_number).pad_zeros(4)
-	if form_str:
-		query += "-%s" % form_str
-	if type_str:
-		query += "-%s" % type_str
-	return spritesheets.get(query, null)
+func get_spriteframes(form_str: String, type_str := "") -> SpriteFrames:
+	var query := form_str
+	if type_str: query += "-%s" % type_str
+	var search := RPGUtils.file_search("%s.tres" % query, "res://resources/spriteframes", true)
+	if search.is_empty(): return null
+	return load(search[0])
 
 #endregion
 
@@ -32,17 +31,20 @@ func get_spritesheet(form_str := "", type_str := "") -> SpriteFrames:
 const DIRECTIONS = ["s", "se", "e", "ne", "n", "nw", "w", "sw"]
 
 @warning_ignore_start("unused_private_class_variable")
+@export_tool_button("Fetch Assets") var _fetch_assets = fetch_assets
 @export_tool_button("Generate Sprite Frames") var _generate_sprite_frames = generate_sprite_frames
 @warning_ignore_restore("unused_private_class_variable")
 
+func fetch_assets():
+	RPGUtils.fetch_assets("Sprite/%s/" % str(dex_number).pad_zeros(4))
+	RPGUtils
+
 func generate_sprite_frames():
-	spritesheets.clear()
-	
 	var path := "%s/%s" % [UNIT_ASSET_FOLDER, str(dex_number).pad_zeros(4)]
 	if not DirAccess.dir_exists_absolute(path):
-		print_rich("[color=red]Filepath %s not found![/color]" % path)
+		print_rich("[color=red]Filepath %s not found! Fetch assets first...![/color]" % path)
 		return
-	var anim_data_files := recursive_search("AnimData.xml", path)
+	var anim_data_files := RPGUtils.file_search("AnimData.xml", path, true)
 	for file in anim_data_files:
 		var folder := file.replace("/AnimData.xml", "")
 		var data := xml_to_anim_data(file)
@@ -74,23 +76,8 @@ func generate_sprite_frames():
 			if not DirAccess.dir_exists_absolute(new_folder):
 				DirAccess.make_dir_absolute(new_folder)
 			ResourceSaver.save(s, "%s/%s.tres" % [new_folder, rn])
-			spritesheets[rn] = s
-
-static func recursive_search(search_term, path: String = "res://", show_hidden: bool = false) -> Array[String]:
-	var dir = DirAccess.open(path)
-	if not dir:
-		return [] as Array[String]
-	dir.set_include_hidden(show_hidden)
-	dir.list_dir_begin()
-	var item = dir.get_next()
-	var return_paths: Array[String]
-	while item != "":
-		if item == search_term:
-			return_paths.append("%s/%s" % [dir.get_current_dir(), item])
-		if dir.current_is_dir() and item != ".":
-			return_paths.append_array(recursive_search(search_term, dir.get_current_dir() + "/" + item, show_hidden))
-		item = dir.get_next()
-	return return_paths
+			if sprf_extensions[s].is_empty() and rn not in forms:
+				forms[rn] = ""
 
 static func aname(anim: String, dir: String) -> String:
 	if dir.is_empty():
