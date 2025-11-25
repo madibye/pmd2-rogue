@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="PokemonDefinition" load_steps=9 format=3 uid="uid://b2laenmjonagl"]
+
+[ext_resource type="Script" uid="uid://cnih0jpookuuq" path="res://game/pokemon/pokemon_base_stats.gd" id="1_g05aq"]
+[ext_resource type="Script" uid="uid://do6jrd33ggefk" path="res://game/pokemon/pokemon_definition.gd" id="1_otako"]
+[ext_resource type="Script" uid="uid://crkwq8lyltuu" path="res://game/ability/ability_definition.gd" id="1_typ8p"]
+[ext_resource type="Script" uid="uid://bqrffujsn775c" path="res://game/pokemon/evolution_condition.gd" id="2_mxkew"]
+[ext_resource type="Resource" uid="uid://71tbmm6471iw" path="res://resources/pokemon/eelektrik.tres" id="4_mr1q1"]
+[ext_resource type="Script" uid="uid://cjpeiwlddldsk" path="res://game/pokemon/form_definition.gd" id="6_um4cc"]
+
+[sub_resource type="Resource" id="Resource_mxkew"]
+script = ExtResource("1_g05aq")
+hp = 50
+attack = 5
+defense = 3
+speed = 41.0
+metadata/_custom_type_script = "uid://bv2os8j4cwgo"
+
+[sub_resource type="Resource" id="Resource_typ8p"]
+script = ExtResource("6_um4cc")
+name = "Tynamo"
+types = Array[int]([11])
+base_stats = SubResource("Resource_mxkew")
+ids = PackedStringArray("0602", "0602-0000-0001", "", "")
+
+[resource]
+script = ExtResource("1_otako")
+name = "Tynamo"
+types = Array[int]([11])
+base_stats = SubResource("Resource_mxkew")
+evolutions = Dictionary[ExtResource("1_otako"), ExtResource("2_mxkew")]({
+ExtResource("4_mr1q1"): null
+})
+dex_number = 602
+forms = Array[ExtResource("6_um4cc")]([SubResource("Resource_typ8p")])
+shadow_size = 1.0
+metadata/_custom_type_script = "uid://do6jrd33ggefk"

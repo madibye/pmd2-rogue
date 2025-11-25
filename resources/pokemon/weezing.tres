@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="PokemonDefinition" load_steps=7 format=3 uid="uid://mv3dh014xt1u"]
+
+[ext_resource type="Script" uid="uid://crkwq8lyltuu" path="res://game/ability/ability_definition.gd" id="1_5nfa3"]
+[ext_resource type="Script" uid="uid://do6jrd33ggefk" path="res://game/pokemon/pokemon_definition.gd" id="2_qtkwt"]
+[ext_resource type="Script" uid="uid://bqrffujsn775c" path="res://game/pokemon/evolution_condition.gd" id="3_a87uq"]
+[ext_resource type="Script" uid="uid://cjpeiwlddldsk" path="res://game/pokemon/form_definition.gd" id="4_iaj3j"]
+
+[sub_resource type="Resource" id="Resource_5nfa3"]
+script = ExtResource("4_iaj3j")
+name = "Weezing"
+types = Array[int]([2])
+ids = PackedStringArray("0110", "0110-0000-0001", "", "")
+
+[sub_resource type="Resource" id="Resource_qtkwt"]
+script = ExtResource("4_iaj3j")
+name = "Galarian Weezing"
+form_number = 1
+types = Array[int]([2, 17])
+ids = PackedStringArray("0110-0001", "0110-0001-0001", "", "")
+
+[resource]
+script = ExtResource("2_qtkwt")
+name = "Weezing"
+types = Array[int]([2])
+dex_number = 110
+forms = Array[ExtResource("4_iaj3j")]([SubResource("Resource_5nfa3"), SubResource("Resource_qtkwt")])
+shadow_size = 2.0
+metadata/_custom_type_script = "uid://do6jrd33ggefk"

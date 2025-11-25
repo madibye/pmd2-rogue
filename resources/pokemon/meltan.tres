@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PokemonDefinition" load_steps=6 format=3 uid="uid://c8gx875rtv7cm"]
+
+[ext_resource type="Script" uid="uid://crkwq8lyltuu" path="res://game/ability/ability_definition.gd" id="1_e6k7h"]
+[ext_resource type="Script" uid="uid://do6jrd33ggefk" path="res://game/pokemon/pokemon_definition.gd" id="2_n6pm4"]
+[ext_resource type="Script" uid="uid://bqrffujsn775c" path="res://game/pokemon/evolution_condition.gd" id="3_uu0ee"]
+[ext_resource type="Script" uid="uid://cjpeiwlddldsk" path="res://game/pokemon/form_definition.gd" id="4_ywwur"]
+
+[sub_resource type="Resource" id="Resource_e6k7h"]
+script = ExtResource("4_ywwur")
+name = "Meltan"
+types = Array[int]([8])
+ids = PackedStringArray("0808", "0808-0000-0001", "", "")
+
+[resource]
+script = ExtResource("2_n6pm4")
+name = "Meltan"
+types = Array[int]([8])
+dex_number = 808
+forms = Array[ExtResource("4_ywwur")]([SubResource("Resource_e6k7h")])
+shadow_size = 1.0
+metadata/_custom_type_script = "uid://do6jrd33ggefk"

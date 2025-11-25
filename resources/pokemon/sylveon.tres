@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PokemonDefinition" load_steps=6 format=3 uid="uid://d120k2hill03t"]
+
+[ext_resource type="Script" uid="uid://crkwq8lyltuu" path="res://game/ability/ability_definition.gd" id="1_2cnbi"]
+[ext_resource type="Script" uid="uid://do6jrd33ggefk" path="res://game/pokemon/pokemon_definition.gd" id="1_55w7s"]
+[ext_resource type="Script" uid="uid://bqrffujsn775c" path="res://game/pokemon/evolution_condition.gd" id="2_2jc53"]
+[ext_resource type="Script" uid="uid://cjpeiwlddldsk" path="res://game/pokemon/form_definition.gd" id="4_f3e2q"]
+
+[sub_resource type="Resource" id="Resource_2cnbi"]
+script = ExtResource("4_f3e2q")
+name = "Sylveon"
+types = Array[int]([17])
+ids = PackedStringArray("0700", "0700-0000-0001", "", "")
+
+[resource]
+script = ExtResource("1_55w7s")
+name = "Sylveon"
+types = Array[int]([17])
+dex_number = 700
+forms = Array[ExtResource("4_f3e2q")]([SubResource("Resource_2cnbi")])
+shadow_size = 1.0
+metadata/_custom_type_script = "uid://do6jrd33ggefk"

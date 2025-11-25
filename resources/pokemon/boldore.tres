@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PokemonDefinition" load_steps=6 format=3 uid="uid://bq27wh5yb8bgi"]
+
+[ext_resource type="Script" uid="uid://crkwq8lyltuu" path="res://game/ability/ability_definition.gd" id="1_n1d51"]
+[ext_resource type="Script" uid="uid://do6jrd33ggefk" path="res://game/pokemon/pokemon_definition.gd" id="2_wj3ge"]
+[ext_resource type="Script" uid="uid://bqrffujsn775c" path="res://game/pokemon/evolution_condition.gd" id="3_ht4l6"]
+[ext_resource type="Script" uid="uid://cjpeiwlddldsk" path="res://game/pokemon/form_definition.gd" id="4_lnwjm"]
+
+[sub_resource type="Resource" id="Resource_n1d51"]
+script = ExtResource("4_lnwjm")
+name = "Boldore"
+types = Array[int]([6])
+ids = PackedStringArray("0525", "0525-0000-0001", "", "")
+
+[resource]
+script = ExtResource("2_wj3ge")
+name = "Boldore"
+types = Array[int]([6])
+dex_number = 525
+forms = Array[ExtResource("4_lnwjm")]([SubResource("Resource_n1d51")])
+shadow_size = 2.0
+metadata/_custom_type_script = "uid://do6jrd33ggefk"

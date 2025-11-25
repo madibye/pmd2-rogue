@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="PokemonDefinition" load_steps=9 format=3 uid="uid://i4onmra5rx4b"]
+
+[ext_resource type="Script" uid="uid://do6jrd33ggefk" path="res://game/pokemon/pokemon_definition.gd" id="1_me1pb"]
+[ext_resource type="Script" uid="uid://crkwq8lyltuu" path="res://game/ability/ability_definition.gd" id="1_nfytw"]
+[ext_resource type="Script" uid="uid://cnih0jpookuuq" path="res://game/pokemon/pokemon_base_stats.gd" id="1_r2mta"]
+[ext_resource type="Script" uid="uid://bqrffujsn775c" path="res://game/pokemon/evolution_condition.gd" id="2_f4hlm"]
+[ext_resource type="Script" uid="uid://cjpeiwlddldsk" path="res://game/pokemon/form_definition.gd" id="6_1lukr"]
+
+[sub_resource type="Resource" id="Resource_bbt8i"]
+script = ExtResource("1_r2mta")
+hp = 80
+attack = 8
+defense = 10
+speed = 31.0
+metadata/_custom_type_script = "uid://cnih0jpookuuq"
+
+[sub_resource type="Resource" id="Resource_nfytw"]
+script = ExtResource("6_1lukr")
+name = "Wooper"
+types = Array[int]([10, 3])
+base_stats = SubResource("Resource_bbt8i")
+ids = PackedStringArray("0194", "0194-0000-0001", "0194-0000-0000-0002", "0194-0000-0001-0002")
+
+[sub_resource type="Resource" id="Resource_1lukr"]
+script = ExtResource("6_1lukr")
+name = "Paldean Wooper"
+form_number = 2
+types = Array[int]([2, 3])
+base_stats = SubResource("Resource_bbt8i")
+ids = PackedStringArray("0194-0002", "0194-0002-0001", "", "")
+
+[resource]
+script = ExtResource("1_me1pb")
+name = "Wooper"
+types = Array[int]([10, 3])
+base_stats = SubResource("Resource_bbt8i")
+dex_number = 194
+forms = Array[ExtResource("6_1lukr")]([SubResource("Resource_nfytw"), SubResource("Resource_1lukr")])
+shadow_size = 1.0
+metadata/_custom_type_script = "uid://do6jrd33ggefk"

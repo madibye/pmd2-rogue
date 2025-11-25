@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="PokemonDefinition" load_steps=6 format=3 uid="uid://baf17wou7gw0v"]
+
+[ext_resource type="Script" uid="uid://do6jrd33ggefk" path="res://game/pokemon/pokemon_definition.gd" id="1_3wh3p"]
+[ext_resource type="Script" uid="uid://crkwq8lyltuu" path="res://game/ability/ability_definition.gd" id="1_p27rg"]
+[ext_resource type="Script" uid="uid://bqrffujsn775c" path="res://game/pokemon/evolution_condition.gd" id="2_lmsum"]
+[ext_resource type="Script" uid="uid://cjpeiwlddldsk" path="res://game/pokemon/form_definition.gd" id="4_3ydbq"]
+
+[sub_resource type="Resource" id="Resource_p27rg"]
+script = ExtResource("4_3ydbq")
+name = "Starly"
+types = Array[int]([0, 4])
+ids = PackedStringArray("0396", "0396-0000-0001", "0396-0000-0000-0002", "0396-0000-0001-0002")
+
+[resource]
+script = ExtResource("1_3wh3p")
+name = "Starly"
+types = Array[int]([0, 4])
+dex_number = 396
+forms = Array[ExtResource("4_3ydbq")]([SubResource("Resource_p27rg")])
+metadata/_custom_type_script = "uid://do6jrd33ggefk"

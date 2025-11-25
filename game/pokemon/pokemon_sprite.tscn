@@ -1,0 +1,28 @@
+[gd_scene load_steps=6 format=3 uid="uid://c17h8rkwmrlcv"]
+
+[ext_resource type="Script" uid="uid://bplualhgev07o" path="res://game/pokemon/pokemon_sprite.gd" id="1_schas"]
+[ext_resource type="Resource" uid="uid://i4onmra5rx4b" path="res://resources/pokemon/wooper.tres" id="2_xmlsj"]
+[ext_resource type="Material" uid="uid://bpyjcrywvnupk" path="res://game/pokemon/pokemon_sprite_shader_material.tres" id="3_m100c"]
+[ext_resource type="SpriteFrames" uid="uid://e5wslixj3s1g" path="res://resources/spriteframes/0194/0194-Shadow.tres" id="4_m100c"]
+[ext_resource type="SpriteFrames" uid="uid://br40fxehbigkx" path="res://resources/spriteframes/0194/0194.tres" id="5_snbud"]
+
+[node name="PokemonSprite" type="Node2D" unique_id=2130735508]
+texture_filter = 1
+script = ExtResource("1_schas")
+definition = ExtResource("2_xmlsj")
+form = "Wooper"
+animation = "Idle"
+direction = 2
+metadata/_custom_type_script = "uid://bplualhgev07o"
+
+[node name="ShadowSprite" type="AnimatedSprite2D" parent="." unique_id=162075994]
+unique_name_in_owner = true
+material = ExtResource("3_m100c")
+sprite_frames = ExtResource("4_m100c")
+animation = &"Idle-e"
+
+[node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=1671962285]
+unique_name_in_owner = true
+texture_filter = 1
+sprite_frames = ExtResource("5_snbud")
+animation = &"Idle-e"

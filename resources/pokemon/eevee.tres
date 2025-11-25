@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PokemonDefinition" load_steps=6 format=3 uid="uid://cpt4k7lip0hwb"]
+
+[ext_resource type="Script" uid="uid://crkwq8lyltuu" path="res://game/ability/ability_definition.gd" id="1_7o43k"]
+[ext_resource type="Script" uid="uid://do6jrd33ggefk" path="res://game/pokemon/pokemon_definition.gd" id="1_uk1hh"]
+[ext_resource type="Script" uid="uid://bqrffujsn775c" path="res://game/pokemon/evolution_condition.gd" id="2_b7vwl"]
+[ext_resource type="Script" uid="uid://cjpeiwlddldsk" path="res://game/pokemon/form_definition.gd" id="4_yjlwy"]
+
+[sub_resource type="Resource" id="Resource_7o43k"]
+script = ExtResource("4_yjlwy")
+name = "Eevee"
+types = Array[int]([0])
+ids = PackedStringArray("0133", "0133-0000-0001", "0133-0000-0000-0002", "0133-0000-0001-0002")
+
+[resource]
+script = ExtResource("1_uk1hh")
+name = "Eevee"
+types = Array[int]([0])
+dex_number = 133
+forms = Array[ExtResource("4_yjlwy")]([SubResource("Resource_7o43k")])
+shadow_size = 1.0
+metadata/_custom_type_script = "uid://do6jrd33ggefk"

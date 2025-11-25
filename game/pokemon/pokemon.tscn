@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://buved15oir700"]
+
+[ext_resource type="Script" uid="uid://vcl88pmxik10" path="res://game/pokemon/pokemon.gd" id="1_bycwd"]
+[ext_resource type="PackedScene" uid="uid://c17h8rkwmrlcv" path="res://game/pokemon/pokemon_sprite.tscn" id="2_bycwd"]
+
+[node name="Pokemon" type="Node2D" unique_id=79435723]
+texture_filter = 1
+script = ExtResource("1_bycwd")
+animation = "Attack"
+direction = 1
+
+[node name="PokemonSprite" parent="." unique_id=2130735508 instance=ExtResource("2_bycwd")]
+unique_name_in_owner = true
+definition = null
+form = ""
+animation = "Attack"
+direction = 1

@@ -274,8 +274,6 @@ static func extract_script_icon(script: Script, limiter: int = 50) -> Texture2D:
 
 static func find_editor_tooltip(c: Node, tooltip: String) -> Control:
 	if is_instance_of(c, Control):
-		#if c.tooltip_text:
-			#print(c.tooltip_text)
 		if c.tooltip_text.contains(tooltip):
 			return c
 	for child in c.get_children():

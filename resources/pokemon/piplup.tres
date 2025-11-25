@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PokemonDefinition" load_steps=6 format=3 uid="uid://y8y6godhdvvp"]
+
+[ext_resource type="Script" uid="uid://crkwq8lyltuu" path="res://game/ability/ability_definition.gd" id="1_4qsj2"]
+[ext_resource type="Script" uid="uid://do6jrd33ggefk" path="res://game/pokemon/pokemon_definition.gd" id="1_wfa4v"]
+[ext_resource type="Script" uid="uid://bqrffujsn775c" path="res://game/pokemon/evolution_condition.gd" id="2_e72bl"]
+[ext_resource type="Script" uid="uid://cjpeiwlddldsk" path="res://game/pokemon/form_definition.gd" id="4_u0m0h"]
+
+[sub_resource type="Resource" id="Resource_4qsj2"]
+script = ExtResource("4_u0m0h")
+name = "Piplup"
+types = Array[int]([10])
+ids = PackedStringArray("0393", "0393-0000-0001", "", "")
+
+[resource]
+script = ExtResource("1_wfa4v")
+name = "Piplup"
+types = Array[int]([10])
+dex_number = 393
+forms = Array[ExtResource("4_u0m0h")]([SubResource("Resource_4qsj2")])
+shadow_size = 1.0
+metadata/_custom_type_script = "uid://do6jrd33ggefk"

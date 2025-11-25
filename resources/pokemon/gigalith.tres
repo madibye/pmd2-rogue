@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="PokemonDefinition" load_steps=6 format=3 uid="uid://du2nfg3i43kje"]
+
+[ext_resource type="Script" uid="uid://crkwq8lyltuu" path="res://game/ability/ability_definition.gd" id="1_v5f0p"]
+[ext_resource type="Script" uid="uid://do6jrd33ggefk" path="res://game/pokemon/pokemon_definition.gd" id="2_m43yy"]
+[ext_resource type="Script" uid="uid://bqrffujsn775c" path="res://game/pokemon/evolution_condition.gd" id="3_2qfc1"]
+[ext_resource type="Script" uid="uid://cjpeiwlddldsk" path="res://game/pokemon/form_definition.gd" id="4_hxgea"]
+
+[sub_resource type="Resource" id="Resource_v5f0p"]
+script = ExtResource("4_hxgea")
+name = "Gigalith"
+types = Array[int]([6])
+ids = PackedStringArray("0526", "0526-0000-0001", "", "")
+
+[resource]
+script = ExtResource("2_m43yy")
+name = "Gigalith"
+types = Array[int]([6])
+dex_number = 526
+forms = Array[ExtResource("4_hxgea")]([SubResource("Resource_v5f0p")])
+shadow_size = 2.0
+metadata/_custom_type_script = "uid://do6jrd33ggefk"

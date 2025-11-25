@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="PokemonDefinition" load_steps=8 format=3 uid="uid://dg0vqnhn2ilcn"]
+
+[ext_resource type="Script" uid="uid://cnih0jpookuuq" path="res://game/pokemon/pokemon_base_stats.gd" id="1_11c14"]
+[ext_resource type="Script" uid="uid://crkwq8lyltuu" path="res://game/ability/ability_definition.gd" id="1_50xu0"]
+[ext_resource type="Script" uid="uid://do6jrd33ggefk" path="res://game/pokemon/pokemon_definition.gd" id="2_6s5lo"]
+[ext_resource type="Script" uid="uid://bqrffujsn775c" path="res://game/pokemon/evolution_condition.gd" id="3_corpt"]
+[ext_resource type="Script" uid="uid://cjpeiwlddldsk" path="res://game/pokemon/form_definition.gd" id="5_mdvhi"]
+
+[sub_resource type="Resource" id="Resource_bbt8i"]
+script = ExtResource("1_11c14")
+hp = 130
+attack = 75
+defense = 60
+special_attack = 45
+special_defense = 100
+speed = 20
+metadata/_custom_type_script = "uid://cnih0jpookuuq"
+
+[sub_resource type="Resource" id="Resource_mdvhi"]
+script = ExtResource("5_mdvhi")
+name = "Clodsire"
+types = Array[int]([2, 3])
+base_stats = SubResource("Resource_bbt8i")
+ids = PackedStringArray("0980", "0980-0000-0001", "", "")
+
+[resource]
+script = ExtResource("2_6s5lo")
+name = "Clodsire"
+types = Array[int]([2, 3])
+base_stats = SubResource("Resource_bbt8i")
+dex_number = 980
+forms = Array[ExtResource("5_mdvhi")]([SubResource("Resource_mdvhi")])
+shadow_size = 2.0
+metadata/_custom_type_script = "uid://do6jrd33ggefk"
