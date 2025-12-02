@@ -2,28 +2,17 @@
 extends Resource
 class_name PokemonDefinition
 
-const POKEMON_ASSET_FOLDER := "res://assets/Sprite"
+const POKEMON_ASSET_FOLDER := "res://RawAsset/Sprite"
 const SPRITE_FRAME_FOLDER := "res://resources/spriteframes"
 
 @export var name: String
-@export var types: Array[Type.T]
-@export var abilities: Array[AbilityDefinition]
+@export var types: Array[Enum.PokemonType]
 @export var base_stats: PokemonBaseStats
 @export var evolutions: Dictionary[PokemonDefinition, EvolutionCondition]
+@export var mobility := Enum.Mobility.Normal
 @export var dex_number: int
 @export var forms: Array[FormDefinition]
 @export var shadow_size: float
-
-#region Helper functions
-
-func get_spriteframes(form_str: String, type_str := "") -> SpriteFrames:
-	var query := form_str
-	if type_str: query += "-%s" % type_str
-	var search := RPGUtils.file_search("%s.tres" % query, "res://resources/spriteframes", true)
-	if search.is_empty(): return null
-	return load(search[0])
-
-#endregion
 
 #region A bunch of XML parsing stuff for animations!!
 
@@ -35,14 +24,14 @@ const DIRECTIONS = ["s", "se", "e", "ne", "n", "nw", "w", "sw"]
 @warning_ignore_restore("unused_private_class_variable")
 
 func fetch_assets():
-	RPGUtils.fetch_assets("Sprite/%s/" % str(dex_number).pad_zeros(4))
+	PMDUtils.fetch_assets("RawAsset", "Sprite/%s/" % str(dex_number).pad_zeros(4))
 
 func generate_sprite_frames():
 	var path := "%s/%s" % [POKEMON_ASSET_FOLDER, str(dex_number).pad_zeros(4)]
 	if not DirAccess.dir_exists_absolute(path):
 		print_rich("[color=red]Filepath %s not found! Fetch assets first...![/color]" % path)
 		return
-	var anim_data_files := RPGUtils.file_search("AnimData.xml", path, true)
+	var anim_data_files := PMDUtils.file_search("AnimData.xml", path, true)
 	forms.clear()
 	for file in anim_data_files:
 		var folder := file.replace("/AnimData.xml", "")
@@ -70,30 +59,24 @@ func generate_sprite_frames():
 					add_frame_to_sprite(shadow_sprf, n, shadow_spritesheet, anim.get("frame_size", Vector2.ZERO), x, y, anim.get("durations", []), DIRECTIONS[y] if rows > 1 else "")
 		var sprf_extensions: Dictionary[SpriteFrames, String] = {normal_sprf: "", offset_sprf: "-Offsets", shadow_sprf: "-Shadow"}
 		for s in sprf_extensions:
-			var rn := folder.replace(POKEMON_ASSET_FOLDER + "/", "").replace("/", "-") + sprf_extensions[s]
-			var new_folder := "%s/%s" % [SPRITE_FRAME_FOLDER, str(dex_number).pad_zeros(4)]
-			if not DirAccess.dir_exists_absolute(new_folder):
-				DirAccess.make_dir_absolute(new_folder)
-			if sprf_extensions[s].is_empty():
-				insert_form_data(rn)
-			ResourceSaver.save(s, "%s/%s.tres" % [new_folder, rn])
+			s.resource_name = folder.replace(POKEMON_ASSET_FOLDER + "/", "").replace("/", "-") + sprf_extensions[s]
+		insert_form_data(normal_sprf.resource_name, sprf_extensions.keys())
 	ResourceSaver.save(self, "res://resources/pokemon/%s.tres" % name.to_lower())
 			
-func insert_form_data(rn: String):
+func insert_form_data(rn: String, spriteframes: Array[SpriteFrames]):
 	var nums = Array(rn.split("-")).map(func(st: String): return int(st))
 	var matching_forms: Array[FormDefinition] = forms.filter(func(f: FormDefinition): return (len(nums) >= 2 and f.form_number == nums[1]) or len(nums) < 2 and f.form_number == 0)
 	if matching_forms.is_empty():
 		var f := FormDefinition.new()
 		f.name = name if forms.is_empty() else "%s %s" % [name, len(forms)]
 		f.types = types
-		f.abilities = abilities
 		f.base_stats = base_stats
 		if len(nums) >= 2: f.form_number = nums[1]
-		f.assign_id(rn, nums)
+		f.assign_form_spriteframes(spriteframes, nums)
 		forms.append(f)
 	else:
 		var f := matching_forms[0]
-		f.assign_id(rn, nums)
+		f.assign_form_spriteframes(spriteframes, nums)
 					
 
 static func aname(anim: String, dir: String) -> String:

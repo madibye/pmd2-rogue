@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DungeonFloorDefinition" load_steps=3 format=3 uid="uid://de7fa0yevep2v"]
+
+[ext_resource type="Script" uid="uid://d4etii5a0fuu4" path="res://game/dungeon/dungeon_floor_definition.gd" id="1_j1brc"]
+[ext_resource type="Resource" uid="uid://c28ihingn73dq" path="res://resources/tiledtef/chasm_cave_1.tres" id="2_kxv0h"]
+
+[resource]
+script = ExtResource("1_j1brc")
+name = "Chasm Cave"
+tile_dtef = ExtResource("2_kxv0h")
+metadata/_custom_type_script = "uid://d4etii5a0fuu4"

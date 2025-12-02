@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="DungeonFloorDefinition" load_steps=3 format=3 uid="uid://rsh7ever58l6"]
+
+[ext_resource type="Script" uid="uid://d4etii5a0fuu4" path="res://game/dungeon/dungeon_floor_definition.gd" id="1_ygfi2"]
+[ext_resource type="Resource" uid="uid://bix2u8lyx26ma" path="res://resources/tiledtef/beach_cave.tres" id="2_3tq21"]
+
+[resource]
+script = ExtResource("1_ygfi2")
+name = "Beach Cave"
+tile_dtef = ExtResource("2_3tq21")
+metadata/_custom_type_script = "uid://d4etii5a0fuu4"

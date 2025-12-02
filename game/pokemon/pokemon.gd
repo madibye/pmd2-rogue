@@ -2,50 +2,59 @@
 extends Node2D
 class_name Pokemon
 
-enum Direction { South, Southeast, East, Northeast, North, Northwest, West, Southwest }
-const VECTOR_TO_DIRECTION: Dictionary[Vector2i, Direction] = {
-	Vector2i(-1, 0): Direction.West, Vector2i(-1, 1): Direction.Southwest, Vector2i(0, 1): Direction.South, 
-	Vector2i(1, 1): Direction.Southeast, Vector2i(1, 0): Direction.East, Vector2i(1, -1): Direction.Northeast, 
-	Vector2i(0, -1): Direction.North, Vector2i(-1, -1): Direction.Northwest
+const VECTOR_TO_DIRECTION: Dictionary[Vector2i, Enum.Direction] = {
+	Vector2i(-1, 0): Enum.Direction.West, Vector2i(-1, 1): Enum.Direction.Southwest, Vector2i(0, 1): Enum.Direction.South, 
+	Vector2i(1, 1): Enum.Direction.Southeast, Vector2i(1, 0): Enum.Direction.East, Vector2i(1, -1): Enum.Direction.Northeast, 
+	Vector2i(0, -1): Enum.Direction.North, Vector2i(-1, -1): Enum.Direction.Northwest
 }
-const BASE_SPEED := 90.0
-const RUN_MULTIPLIER := 2.5
 
 @onready var pokemon_sprite: PokemonSprite = %PokemonSprite
 
 @export var definition: PokemonDefinition:
 	set(x):
+		var same := x == definition
 		definition = x
-		await RPGUtils.until_ready(self)
+		if same: return
+		await PMDUtils.until_ready(self)
 		pokemon_sprite.definition = x
 		notify_property_list_changed()
 @export var form: String:
 	set(x):
+		var same := x == form
 		form = x
-		await RPGUtils.until_ready(self)
+		if same: return
+		await PMDUtils.until_ready(self)
 		pokemon_sprite.form = x
 		notify_property_list_changed()
 @export var shiny: bool:
 	set(x):
+		var same := x == shiny
 		shiny = x
-		await RPGUtils.until_ready(self)
+		if same: return
+		await PMDUtils.until_ready(self)
 		pokemon_sprite.shiny = x
 		notify_property_list_changed()
 @export var female: bool:
 	set(x):
+		var same := x == female
 		female = x
-		await RPGUtils.until_ready(self)
+		if same: return
+		await PMDUtils.until_ready(self)
 		pokemon_sprite.female = x
 		notify_property_list_changed()
 @export var animation: String:
 	set(x):
+		var same := x == animation
 		animation = x
-		await RPGUtils.until_ready(self)
+		if same: return
+		await PMDUtils.until_ready(self)
 		pokemon_sprite.animation = x
-@export var direction: Direction:
+@export var direction: Enum.Direction:
 	set(x):
+		var same := x == direction
 		direction = x
-		await RPGUtils.until_ready(self)
+		if same: return
+		await PMDUtils.until_ready(self)
 		pokemon_sprite.direction = x
 
 @warning_ignore_start("unused_private_class_variable")
@@ -55,33 +64,13 @@ const RUN_MULTIPLIER := 2.5
 
 @export var controllable := false:
 	set(x):
+		var same := x == controllable
 		controllable = x
-		await RPGUtils.until_ready(self)
-		pokemon_sprite.set_controllable(x)
+		if same: return
+		await PMDUtils.until_ready(self)
+		pokemon_sprite.set_shadow_effect(Enum.ShadowEffect.Controllable if x else Enum.ShadowEffect.Default)
 
 var full_anim_name: StringName
-
-func _ready():
-	await get_tree().process_frame
-	if Engine.is_editor_hint():
-		set_process(false)
-
-func _process(delta):
-	pokemon_sprite.set_controllable(controllable)
-	if not controllable:
-		return
-	var input_vec := Vector2(Input.get_vector(&"left", &"right", &"up", &"down"))
-	var input_dir := Vector2i(roundi(input_vec.x), roundi(input_vec.y))
-	var dir: Direction = VECTOR_TO_DIRECTION.get(input_dir, -1)
-	if dir == -1:
-		pokemon_sprite.play_anim("Idle", false)
-		pokemon_sprite.set_anim_speed(1.0)
-		return
-	direction = dir
-	pokemon_sprite.play_anim("Walk")
-	var speed := (RUN_MULTIPLIER if Input.is_action_pressed("run") else 1.0)
-	pokemon_sprite.set_anim_speed(speed)
-	position += input_vec * (delta * BASE_SPEED) * speed
 	
 func play_anim(anim := "", with_continue := true):
 	pokemon_sprite.play_anim(anim, with_continue)

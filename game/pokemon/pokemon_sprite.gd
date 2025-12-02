@@ -2,57 +2,70 @@
 extends Node2D
 class_name PokemonSprite
 
-const Direction := Pokemon.Direction
-
 @onready var sprite: AnimatedSprite2D = %Sprite
 @onready var shadow_sprite: AnimatedSprite2D = %ShadowSprite
+@onready var offset_sprite: AnimatedSprite2D = %OffsetSprite
 
 @export var definition: PokemonDefinition:
 	set(x):
+		var same := x == definition
 		definition = x
-		update_spritesheet()
+		if not same: update_spritesheet()
 @export var form: String:
 	set(x):
+		var same := x == form
 		form = x
-		update_spritesheet()
+		if not same: update_spritesheet()
 @export var shiny: bool:
 	set(x):
+		var same := x == shiny
 		shiny = x
-		update_spritesheet()
+		if not same: update_spritesheet()
 @export var female: bool:
 	set(x):
+		var same := x == female
 		female = x
-		update_spritesheet()
+		if not same: update_spritesheet()
 @export var animation: String:
 	set(x):
+		var same := x == animation
 		animation = x
-		update_anim()
-@export var direction: Direction:
+		if not same: update_anim(true)
+@export var direction: Enum.Direction:
 	set(x):
+		var same := x == direction
 		direction = x
-		update_anim()
+		if not same: update_anim(true)
 
 var full_anim_name: StringName
+var shadow_effect: Enum.ShadowEffect = Enum.ShadowEffect.Default
 
 func _ready():
+	set_shadow_effect(shadow_effect)
 	play_anim("Idle")
+	
+func get_form_definition() -> FormDefinition:
+	var form_names := definition.forms.map(func map_form_to_name(f: FormDefinition): return f.name)
+	var valid_form_defs: Array[FormDefinition] = definition.forms.filter(func form_name_is_form(f: FormDefinition): return f.name == form)
+	if not form in form_names or not valid_form_defs:
+		form = form_names[0]
+		return get_form_definition()
+	return valid_form_defs[0]
 
 func update_spritesheet():
-	await RPGUtils.until_ready(self)
+	await PMDUtils.until_ready(self)
 	var isp := is_playing()
 	if not definition or not definition.forms:
 		sprite.sprite_frames = null
 		shadow_sprite.sprite_frames = null
 		return
-	var form_names := definition.forms.map(func(f: FormDefinition): return f.name)
-	var valid_form_defs: Array[FormDefinition] = definition.forms.filter(func(f: FormDefinition): return f.name == form)
-	if not form in form_names or not valid_form_defs:
-		form = form_names[0]
+	var form_def := get_form_definition()
+	if not form_def:
 		return
-	var form_def: FormDefinition = valid_form_defs[0]
-	var form_id: String = form_def.get_id(shiny, female)
-	sprite.sprite_frames = definition.get_spriteframes(form_id)
-	shadow_sprite.sprite_frames = definition.get_spriteframes(form_id, "Shadow")
+	
+	sprite.sprite_frames = form_def.get_spriteframes(shiny, female)
+	shadow_sprite.sprite_frames = form_def.get_spriteframes(shiny, female, "Shadow")
+	offset_sprite.sprite_frames = form_def.get_spriteframes(shiny, female, "Offset")
 	shadow_sprite.material.set_shader_parameter(&"shadow_size", definition.shadow_size)
 	notify_property_list_changed()
 	update_anim()
@@ -61,36 +74,39 @@ func update_spritesheet():
 func is_playing(anim := "") -> bool:
 	return (sprite.is_playing() and shadow_sprite.is_playing()) and (anim.is_empty()) or (sprite.animation.contains(anim) and shadow_sprite.animation.contains(anim))
 
-func update_anim():
-	await RPGUtils.until_ready(self)
+func update_anim(play := false):
+	await PMDUtils.until_ready(self)
 	if not sprite.sprite_frames:
 		return
 	var isp := is_playing()
-	if sprite.sprite_frames.has_animation(animation):
-		full_anim_name = animation
+	var anim_direction := "%s-%s" % [animation, PokemonDefinition.DIRECTIONS[direction]]
+	if sprite.sprite_frames.has_animation(anim_direction):
+		full_anim_name = anim_direction
 	else:
-		full_anim_name = "%s-%s" % [animation, PokemonDefinition.DIRECTIONS[direction]]
-	if not sprite.sprite_frames.has_animation(full_anim_name) or not shadow_sprite.sprite_frames.has_animation(full_anim_name):
+		full_anim_name = animation
+	if [sprite, shadow_sprite, offset_sprite].any(func(s: AnimatedSprite2D): return not s.sprite_frames.has_animation(full_anim_name)):
 		return
-	print(full_anim_name)
 	sprite.animation = full_anim_name
 	shadow_sprite.animation = full_anim_name
-	if isp: play_anim()
+	offset_sprite.animation = full_anim_name
+	if isp or play: play_anim()
 
 func play_anim(anim := "", with_continue := true):
 	if is_playing(anim) or not sprite.sprite_frames:
 		return
-	var u := [sprite.get_frame(), sprite.get_frame_progress()]
-	var s := [shadow_sprite.get_frame(), shadow_sprite.get_frame_progress()]
+	var frame_and_progress := [sprite.get_frame(), sprite.get_frame_progress(), shadow_sprite.get_frame(), shadow_sprite.get_frame_progress(), offset_sprite.get_frame(), offset_sprite.get_frame_progress()]
 	if not anim.is_empty():
 		animation = anim
-	if not sprite.sprite_frames.has_animation(full_anim_name) or not shadow_sprite.sprite_frames.has_animation(full_anim_name):
+		return
+	if [sprite, shadow_sprite, offset_sprite].any(func(s: AnimatedSprite2D): return not s.sprite_frames.has_animation(full_anim_name)):
 		return
 	sprite.play(full_anim_name)
 	shadow_sprite.play(full_anim_name)
+	offset_sprite.play(full_anim_name)
 	if with_continue:
-		sprite.set_frame_and_progress(u[0], u[1])
-		shadow_sprite.set_frame_and_progress(s[0], s[1])
+		sprite.set_frame_and_progress(frame_and_progress[0], frame_and_progress[1])
+		shadow_sprite.set_frame_and_progress(frame_and_progress[2], frame_and_progress[3])
+		offset_sprite.set_frame_and_progress(frame_and_progress[2], frame_and_progress[3])
 
 func stop_anim():
 	sprite.stop()
@@ -100,9 +116,9 @@ func set_anim_speed(speed := 1.0):
 	sprite.speed_scale = speed
 	shadow_sprite.speed_scale = speed
 	
-func set_controllable(c := false):
-	shadow_sprite.material.set_shader_parameter(&"outline_color", Color("fff200ff") if c else Color("00000000"))
-	shadow_sprite.material.set_shader_parameter(&"inner_color", Color("a26800ff") if c else Color("000000ff"))
+func set_shadow_effect(e: Enum.ShadowEffect):
+	shadow_sprite.material.set_shader_parameter(&"outline_color", Color("fff200ff") if e == Enum.ShadowEffect.Controllable else Color("00000000"))
+	shadow_sprite.material.set_shader_parameter(&"inner_color", Color("a26800ff") if e == Enum.ShadowEffect.Controllable else Color("000000ff"))
 
 func _validate_property(property):
 	match property["name"]:

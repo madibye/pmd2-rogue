@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://cu8dvc38x8sx4"]
+
+[ext_resource type="FontFile" uid="uid://c40whl7plm2bh" path="res://assets/font/banner/banner.png" id="1_w08eu"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_0bn6q"]
+font = ExtResource("1_w08eu")
+font_size = 24
+
+[node name="Label" type="Label" unique_id=1951036463]
+offset_left = 7.0
+offset_top = 9.0
+offset_right = 51.0
+offset_bottom = 32.0
+text = "Beach Cave
+B1F"
+label_settings = SubResource("LabelSettings_0bn6q")
+horizontal_alignment = 1

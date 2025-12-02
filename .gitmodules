@@ -1,3 +1,9 @@
 [submodule "RawAsset"]
 	path = RawAsset
 	url = https://github.com/PMDCollab/RawAsset
+[submodule "assets/DumpAsset/DumpAsset"]
+	path = assets/DumpAsset/DumpAsset
+	url = https://github.com/audinowho/DumpAsset
+[submodule "DumpAsset"]
+	path = DumpAsset
+	url = https://github.com/audinowho/DumpAsset

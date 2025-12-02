@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://bnm377x585wru"]
+
+[ext_resource type="Texture2D" uid="uid://dyt78pa8h2qv1" path="res://DumpAsset/Content/UI/MenuBG.png" id="1_x5ny2"]
+[ext_resource type="Script" uid="uid://1p87ovwnnkeo" path="res://game/ui/menu_background.gd" id="2_83ylc"]
+[ext_resource type="PackedScene" uid="uid://bdsidg7eppsj5" path="res://game/ui/menu_border.tscn" id="3_83ylc"]
+
+[node name="MenuBackground2" type="NinePatchRect" unique_id=1685243408]
+custom_minimum_size = Vector2(20, 20)
+offset_right = 54.0
+offset_bottom = 34.0
+texture = ExtResource("1_x5ny2")
+region_rect = Rect2(7, 4, 10, 16)
+patch_margin_left = 1
+patch_margin_top = 1
+patch_margin_right = 1
+patch_margin_bottom = 1
+script = ExtResource("2_83ylc")
+
+[node name="MenuBorder" parent="." unique_id=1380519727 instance=ExtResource("3_83ylc")]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 58.0
+offset_bottom = 38.0
