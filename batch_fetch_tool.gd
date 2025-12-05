@@ -21,6 +21,7 @@ func fetch_all_assets():
 			resource.fetch_assets()
 	PMDUtils.fetch_assets("DumpAsset", "Content/Font")
 	PMDUtils.fetch_assets("DumpAsset", "Content/UI")
+	PMDUtils.fetch_assets("RawAsset", "Particle")
 
 func generate_pokemon_spritesheets():
 	var paths: Array[String]

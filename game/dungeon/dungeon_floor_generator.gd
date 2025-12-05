@@ -82,7 +82,6 @@ func perform_merges():
 					for point_2 in room_2_border_tiles:
 						if point_1.distance_to(point_2) <= MIN_ROOM_DISTANCE and (room_1 not in merging_rooms and room_2 not in merging_rooms):
 							merging_rooms.append_array([room_1, room_2])
-	print(merging_rooms)
 	for _i in roundi(len(merging_rooms) * 0.5):
 		var room_1: Room = merging_rooms.pop_front()
 		var room_2: Room = merging_rooms.pop_front()

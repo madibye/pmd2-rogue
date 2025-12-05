@@ -12,7 +12,7 @@ const SPRITE_FRAME_FOLDER := "res://resources/spriteframes"
 @export var mobility := Enum.Mobility.Normal
 @export var dex_number: int
 @export var forms: Array[FormDefinition]
-@export var shadow_size: float
+@export var shadow_size: int
 
 #region A bunch of XML parsing stuff for animations!!
 
@@ -34,67 +34,44 @@ func generate_sprite_frames():
 	var anim_data_files := PMDUtils.file_search("AnimData.xml", path, true)
 	forms.clear()
 	for file in anim_data_files:
+		var form_anims: Array
 		var folder := file.replace("/AnimData.xml", "")
-		var data := xml_to_anim_data(file)
-		var normal_sprf := SpriteFrames.new()
-		var offset_sprf := SpriteFrames.new()
-		var shadow_sprf := SpriteFrames.new()
-		for s in [normal_sprf, offset_sprf, shadow_sprf]:
-			s.remove_animation(&"default")
-		for anim in data:
-			var n: String = anim.get("name")
+		var anim_data := xml_to_anim_data(file)
+		for anim in anim_data:
+			var anim_name: String = anim.get("name")
 			if anim.get("copy_of"):
-				var valid := data.filter(func(a): return a.get("name") == anim.get("copy_of"))
+				var valid := anim_data.filter(func(a): return a.get("name") == anim.get("copy_of"))
 				if not valid.is_empty():
-					anim = valid[0]
-			var normal_spritesheet: Texture2D = load("%s/%s-Anim.png" % [folder, anim.get("name")])
-			var offset_spritesheet: Texture2D = load("%s/%s-Offsets.png" % [folder, anim.get("name")])
-			var shadow_spritesheet: Texture2D = load("%s/%s-Shadow.png" % [folder, anim.get("name")])
-			var rows := floori(normal_spritesheet.get_size().y / anim.get("frame_size", Vector2.ZERO).y)
-			var cols := floori(normal_spritesheet.get_size().x / anim.get("frame_size", Vector2.ZERO).x)
-			for y in rows:
-				for x in cols:
-					add_frame_to_sprite(normal_sprf, n, normal_spritesheet, anim.get("frame_size", Vector2.ZERO), x, y, anim.get("durations", []), DIRECTIONS[y] if rows > 1 else "")
-					add_frame_to_sprite(offset_sprf, n, offset_spritesheet, anim.get("frame_size", Vector2.ZERO), x, y, anim.get("durations", []), DIRECTIONS[y] if rows > 1 else "")
-					add_frame_to_sprite(shadow_sprf, n, shadow_spritesheet, anim.get("frame_size", Vector2.ZERO), x, y, anim.get("durations", []), DIRECTIONS[y] if rows > 1 else "")
-		var sprf_extensions: Dictionary[SpriteFrames, String] = {normal_sprf: "", offset_sprf: "-Offsets", shadow_sprf: "-Shadow"}
-		for s in sprf_extensions:
-			s.resource_name = folder.replace(POKEMON_ASSET_FOLDER + "/", "").replace("/", "-") + sprf_extensions[s]
-		insert_form_data(normal_sprf.resource_name, sprf_extensions.keys())
+					form_anims.append("%s->%s" % [anim_name, valid[0].get("name")])
+			else:
+				var durations: Array[int]
+				durations.assign(anim.get("durations", []).map(func(d): return roundi(d)))
+				var animation := PokemonAnimation.new()
+				animation.name = anim_name
+				animation.durations = durations
+				animation.frame_size = anim.get("frame_size", Vector2i.ZERO)
+				animation.anim_texture = load("%s/%s-Anim.png" % [folder, anim.get("name")])
+				animation.offsets_texture = load("%s/%s-Offsets.png" % [folder, anim.get("name")])
+				animation.shadow_texture = load("%s/%s-Shadow.png" % [folder, anim.get("name")])
+				form_anims.append(animation)
+				
+		insert_form_data(form_anims, folder.replace(POKEMON_ASSET_FOLDER + "/", "").replace("/", "-"))
 	ResourceSaver.save(self, "res://resources/pokemon/%s.tres" % name.to_lower())
 			
-func insert_form_data(rn: String, spriteframes: Array[SpriteFrames]):
-	var nums = Array(rn.split("-")).map(func(st: String): return int(st))
+func insert_form_data(form_anims: Array, form_id: String):
+	var nums = Array(form_id.split("-")).map(func(st: String): return int(st))
 	var matching_forms: Array[FormDefinition] = forms.filter(func(f: FormDefinition): return (len(nums) >= 2 and f.form_number == nums[1]) or len(nums) < 2 and f.form_number == 0)
+	var form: FormDefinition
 	if matching_forms.is_empty():
-		var f := FormDefinition.new()
-		f.name = name if forms.is_empty() else "%s %s" % [name, len(forms)]
-		f.types = types
-		f.base_stats = base_stats
-		if len(nums) >= 2: f.form_number = nums[1]
-		f.assign_form_spriteframes(spriteframes, nums)
-		forms.append(f)
+		form = FormDefinition.new()
+		form.name = name if forms.is_empty() else "%s %s" % [name, len(forms)]
+		form.types = types
+		form.base_stats = base_stats
+		if len(nums) >= 2: form.form_number = nums[1]
+		forms.append(form)
 	else:
-		var f := matching_forms[0]
-		f.assign_form_spriteframes(spriteframes, nums)
-					
-
-static func aname(anim: String, dir: String) -> String:
-	if dir.is_empty():
-		return anim
-	return "%s-%s" % [anim, dir]
-	
-static func add_frame_to_sprite(sprf: SpriteFrames, anim_name: String, spritesheet: Texture2D, region_size: Vector2, x: int, y: int, durations: Array, direction: String = ""):
-	var frame_tex := AtlasTexture.new()
-	frame_tex.atlas = spritesheet
-	frame_tex.region = Rect2(Vector2(x, y) * region_size, region_size)
-	var n := aname(anim_name, direction)
-	if not n in sprf.get_animation_names():
-		sprf.add_animation(n)
-		sprf.set_animation_loop(n, true)
-		sprf.set_animation_speed(n, 30.0)
-	var c := sprf.get_frame_count(n)
-	sprf.add_frame(n, frame_tex, 1.0 if not c < len(durations) else float(durations[c]))
+		form = matching_forms[0]
+	form.add_animations(form_anims, nums)
 
 func xml_to_anim_data(path: String) -> Array[Dictionary]:
 	var p := XMLParser.new()
@@ -119,7 +96,7 @@ func xml_to_anim_data(path: String) -> Array[Dictionary]:
 				if data.is_empty():
 					continue
 				if xml_pos[-1] == "ShadowSize":
-					shadow_size = float(data)
+					shadow_size = int(data)
 				if xml_pos[-1] == "Name" and xml_pos[-2] == "Anim":
 					curr_anim["name"] = data
 				if (xml_pos[-1] == "FrameWidth" or xml_pos[-1] == "FrameHeight") and xml_pos[-2] == "Anim":

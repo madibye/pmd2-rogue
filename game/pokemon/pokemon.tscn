@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" uid="uid://vcl88pmxik10" path="res://game/pokemon/pokemon.gd" id="1_bycwd"]
 [ext_resource type="PackedScene" uid="uid://c17h8rkwmrlcv" path="res://game/pokemon/pokemon_sprite.tscn" id="2_bycwd"]
-[ext_resource type="Resource" uid="uid://jtbvn5n7vcie" path="res://resources/pokemon/floragato.tres" id="2_cr83p"]
+[ext_resource type="Resource" uid="uid://cpt4k7lip0hwb" path="res://resources/pokemon/eevee.tres" id="2_cr83p"]
 [ext_resource type="Script" uid="uid://4g7ocomyuw8t" path="res://game/pokemon/pokemon_controller.gd" id="3_tp47b"]
 
 [node name="Pokemon" type="Node2D" unique_id=79435723]
 texture_filter = 1
 script = ExtResource("1_bycwd")
 definition = ExtResource("2_cr83p")
-form = "Floragato"
+form = "Eevee"
 shiny = true
 female = true
 animation = "Idle"
@@ -17,10 +17,9 @@ direction = 1
 
 [node name="PokemonSprite" parent="." unique_id=2130735508 instance=ExtResource("2_bycwd")]
 unique_name_in_owner = true
-definition = ExtResource("2_cr83p")
-form = "Floragato"
 shiny = true
 female = true
+animation_name = "Idle"
 
 [node name="PokemonController" type="Node2D" parent="." unique_id=1720443683]
 script = ExtResource("3_tp47b")

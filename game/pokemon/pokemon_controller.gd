@@ -39,17 +39,17 @@ func _process(delta):
 func do_free_move(delta: float):
 	pokemon_sprite.set_shadow_effect(Enum.ShadowEffect.Controllable if controllable else Enum.ShadowEffect.Default)
 	if not controllable:
-		pokemon_sprite.play_anim("Idle", false)
+		pokemon_sprite.play("Idle", 1.0)
 		return
 	var input_vec := Vector2(Input.get_vector(&"left", &"right", &"up", &"down"))
 	var input_dir := Vector2i(roundi(input_vec.x), roundi(input_vec.y))
 	var dir: Enum.Direction = VECTOR_TO_DIRECTION.get(input_dir, -1)
 	if dir == -1:
-		pokemon_sprite.play_anim("Idle", false)
+		pokemon_sprite.play("Idle", 1.0)
 		pokemon_sprite.set_anim_speed(1.0)
 		return
 	direction = dir
-	pokemon_sprite.play_anim("Walk")
+	pokemon_sprite.play("Walk")
 	var speed := (RUN_MULTIPLIER if Input.is_action_pressed("run") else 1.0)
 	pokemon_sprite.set_anim_speed(speed)
 	pokemon_position += input_vec * (delta * BASE_SPEED) * speed
@@ -63,7 +63,7 @@ func do_dungeon_action():
 	move_blocked = move_blocked and input_vec != Vector2i.ZERO
 	if (input_vec != Vector2i.ZERO or automove != Vector2i.ZERO) and not move_blocked:
 		moving = do_dungeon_movement(input_vec)
-	if not moving and pokemon_sprite.sprite.frame < 2: 
+	if not moving and pokemon_sprite.sprite.frame_coords.x < 2: 
 		set_idle()
 	
 func do_dungeon_movement(input: Vector2i) -> bool:
@@ -84,12 +84,11 @@ func do_dungeon_movement(input: Vector2i) -> bool:
 		return false
 	
 	var is_running := Input.is_action_pressed("run") or automove != Vector2i.ZERO
-	var anim_speed := 2.5 if is_running else 1.3
+	var anim_speed := 2.5 if is_running else 1.0
 	var move_time := 0.01 if is_running else 0.25
 	if Input.is_action_pressed("run") and not automove_was_interrupted: automove = move_direction
 	action_tween = get_tree().create_tween().bind_node(pokemon)
-	action_tween.tween_callback(pokemon_sprite.play_anim.bind("Walk"))
-	action_tween.tween_callback(pokemon_sprite.set_anim_speed.bind(anim_speed))
+	action_tween.tween_callback(pokemon_sprite.play.bind("Walk", anim_speed))
 	action_tween.tween_property(self, ^"pokemon_position", tile_map.map_to_local(cell + move_direction), move_time)
 	return true
 	
@@ -133,7 +132,6 @@ func check_tile_collision(from: Vector2i, to: Vector2i) -> bool:
 	return stuck_in_terrain or (not corner_walls and to_allowed_terrain)
 	
 func set_idle():
-	if pokemon_sprite.animation == "Idle":
+	if pokemon_sprite.animation_name == "Idle":
 		return
-	pokemon_sprite.play_anim("Idle", false)
-	pokemon_sprite.set_anim_speed(1.0)
+	pokemon_sprite.play("Idle", 1.0)

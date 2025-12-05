@@ -38,7 +38,7 @@
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_x0ft0"]
 resource_name = "tileset_0"
-texture = ExtResource("5_20wxm")
+texture = ExtResource("7_mlwer")
 texture_region_size = Vector2i(24, 24)
 6:0/next_alternative_id = 3
 6:0/0 = 0
@@ -470,7 +470,7 @@ sources/3 = SubResource("TileSetAtlasSource_kh27s")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_u865x"]
 resource_name = "tileset_0"
-texture = ExtResource("30_ke54s")
+texture = ExtResource("21_ci6sw")
 texture_region_size = Vector2i(24, 24)
 6:0/next_alternative_id = 3
 6:0/0 = 0

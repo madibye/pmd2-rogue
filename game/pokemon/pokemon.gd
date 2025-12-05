@@ -48,7 +48,7 @@ const VECTOR_TO_DIRECTION: Dictionary[Vector2i, Enum.Direction] = {
 		animation = x
 		if same: return
 		await PMDUtils.until_ready(self)
-		pokemon_sprite.animation = x
+		pokemon_sprite.animation_name = x
 @export var direction: Enum.Direction:
 	set(x):
 		var same := x == direction
@@ -59,6 +59,7 @@ const VECTOR_TO_DIRECTION: Dictionary[Vector2i, Enum.Direction] = {
 
 @warning_ignore_start("unused_private_class_variable")
 @export_tool_button("Play Animation") var _play_anim = play_anim
+@export_tool_button("Pause Animation") var _pause_anim = pause_anim
 @export_tool_button("Stop Animation") var _stop_anim = stop_anim
 @warning_ignore_restore("unused_private_class_variable")
 
@@ -68,15 +69,18 @@ const VECTOR_TO_DIRECTION: Dictionary[Vector2i, Enum.Direction] = {
 		controllable = x
 		if same: return
 		await PMDUtils.until_ready(self)
-		pokemon_sprite.set_shadow_effect(Enum.ShadowEffect.Controllable if x else Enum.ShadowEffect.Default)
+		pokemon_sprite.shadow_effect = (Enum.ShadowEffect.Controllable if x else Enum.ShadowEffect.Default)
 
 var full_anim_name: StringName
 	
-func play_anim(anim := "", with_continue := true):
-	pokemon_sprite.play_anim(anim, with_continue)
+func play_anim(anim := ""):
+	pokemon_sprite.play(anim)
+	
+func pause_anim():
+	pokemon_sprite.pause()
 	
 func stop_anim():
-	pokemon_sprite.stop_anim()
+	pokemon_sprite.stop()
 	
 func _validate_property(property: Dictionary):
 	match property["name"]:
@@ -99,14 +103,16 @@ func _validate_property(property: Dictionary):
 				form = names[0]
 			return property
 		"animation":
-			if not pokemon_sprite.sprite.sprite_frames:
+			if not pokemon_sprite.get_form_definition():
 				property["hint"] = PROPERTY_HINT_NONE
 				return property
 			var names := []
-			for n in pokemon_sprite.sprite.sprite_frames.get_animation_names():
-				var sn := n.substr(0, n.find("-"))
-				if not sn in names:
-					names.append(sn)
+			for anim in pokemon_sprite.get_form_definition().get_animations(shiny, female):
+				var anim_name: String
+				if anim is String: anim_name = anim.split("->")[0]
+				else: anim_name = anim.name
+				if not anim_name in names:
+					names.append(anim_name)
 			property["hint"] = PROPERTY_HINT_ENUM
 			property["hint_string"] = ",".join(names)
 			return property
